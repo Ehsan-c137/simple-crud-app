@@ -89,7 +89,10 @@ export default function ProductItem({
                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                onClick={(e) => {
                   setIsEditing(!isEditing);
-                  if (isEditing) handleUpdateProduct(e);
+                  if (isEditing && product.name.length > 0) {
+                     // TODO: install zod for validation
+                     handleUpdateProduct(e);
+                  }
                }}
             >
                {isEditing ? "Save" : "Edit"}
