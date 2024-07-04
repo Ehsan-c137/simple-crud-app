@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { IProduct } from "@/types/Product";
 import useProduct from "@/hooks/useProduct";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import updateProduct from "@/api/updateProduct";
+import deleteProduct from "@/api/deleteProduct";
 
 export default function ProductItem({
    productItem,
@@ -9,6 +12,38 @@ export default function ProductItem({
 }) {
    const [isEditing, setIsEditing] = useState<Boolean>(false);
    const { product, handleProductDetail } = useProduct();
+   const queryClient = useQueryClient();
+
+   const updateMutation = useMutation({
+      mutationFn: updateProduct,
+      onSuccess: () => {
+         queryClient.invalidateQueries({
+            queryKey: ["products"],
+         });
+      },
+   });
+
+   const handleUpdateProduct = (e: React.FormEvent) => {
+      e.preventDefault();
+      updateMutation.mutate({
+         ...product,
+         id: productItem.id,
+      });
+   };
+
+   const deleteMutation = useMutation({
+      mutationFn: deleteProduct,
+      onSuccess: () => {
+         queryClient.invalidateQueries({
+            queryKey: ["products"],
+         });
+      },
+   });
+
+   const handleDeleteProduct = (e: React.FormEvent) => {
+      e.preventDefault();
+      deleteMutation.mutate(productItem.id);
+   };
 
    return (
       <>
@@ -52,11 +87,17 @@ export default function ProductItem({
             </div>
             <button
                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-               onClick={() => setIsEditing(!isEditing)}
+               onClick={(e) => {
+                  setIsEditing(!isEditing);
+                  if (isEditing) handleUpdateProduct(e);
+               }}
             >
                {isEditing ? "Save" : "Edit"}
             </button>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <button
+               onClick={handleDeleteProduct}
+               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
                Delete
             </button>
          </div>
