@@ -1,5 +1,4 @@
 import { IProduct } from "@/types/Product";
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "./index";
 
 export default async function createProduct(data: IProduct) {
