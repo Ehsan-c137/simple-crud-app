@@ -39,7 +39,7 @@ export default function Products() {
    if (isError) return "something went wrong";
 
    return (
-      <div className=" bg-gray-300 p-4 w-full">
+      <div className=" bg-gray-300 p-4 w-full min-h-screen">
          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             <Link href="/">Home</Link>
          </button>
