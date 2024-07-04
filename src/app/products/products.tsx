@@ -4,16 +4,13 @@ import GetProducts from "@/api/getProducts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { IProduct } from "@/types/Product";
 import Link from "next/link";
-import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import createProduct from "@/api/createProduct";
-import { randomUUID } from "crypto";
+import ProductItem from "./productItem";
+import useProduct from "@/hooks/useProduct";
 
 export default function Products() {
-   const [newProduct, setNewProduct] = useState({
-      name: "",
-      price: "",
-   });
+   const { product: newProduct, handleProductDetail } = useProduct();
 
    const queryClient = useQueryClient();
 
@@ -25,26 +22,17 @@ export default function Products() {
    const mutation = useMutation({
       mutationFn: createProduct,
       onSuccess: () => {
-         console.log("new product created");
+         // TODO: add toast
          queryClient.invalidateQueries({ queryKey: ["products"] });
       },
    });
-
-   const handleProductDetail = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNewProduct({
-         ...newProduct,
-         [e.target.name]: e.target.value,
-      });
-   };
 
    const submitProduct = (e: React.FormEvent) => {
       e.preventDefault();
       mutation.mutate({
          ...newProduct,
-         id: randomUUID(),
+         id: Date.now().toString(),
       });
-
-      return false;
    };
 
    if (isLoading) return "loading...";
@@ -56,7 +44,7 @@ export default function Products() {
             <Link href="/">Home</Link>
          </button>
          <div className="max-w-lg lg:ms-auto mx-auto text-center bg-slate-600 p-4 rounded-xl mb-4">
-            <form>
+            <form onSubmit={submitProduct}>
                <div className="grid md:grid-cols-2 grid-cols-1 gap-6 p-4 ">
                   <input
                      type="text"
@@ -68,7 +56,7 @@ export default function Products() {
                      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700 "
                   />
                   <input
-                     type="text"
+                     type="number"
                      id="price"
                      onChange={handleProductDetail}
                      value={newProduct.price}
@@ -79,7 +67,6 @@ export default function Products() {
                </div>
                <button
                   type="submit"
-                  onSubmit={() => submitProduct}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                >
                   add product
@@ -88,29 +75,7 @@ export default function Products() {
          </div>
          <div className="flex flex-wrap justify-center gap-8 w-full">
             {data.map((product: IProduct) => {
-               return (
-                  <div
-                     className="flex items-center justify-center"
-                     key={product.id}
-                  >
-                     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                        <div>
-                           <a href="#">
-                              <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                                 {product?.name}
-                              </h5>
-                           </a>
-                           <div className="flex items-center justify-between">
-                              <span className="text-3xl font-bold text-gray-900 dark:text-white">
-                                 {product?.price}$
-                              </span>
-
-                              {/* <AddToCart id={props.params.id} /> */}
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               );
+               return <ProductItem productItem={product} key={product.id} />;
             })}
          </div>
       </div>
