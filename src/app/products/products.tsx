@@ -5,7 +5,6 @@ import { IProduct } from "@/types/Product";
 import Link from "next/link";
 import { getProducts, createProduct } from "@/api";
 import ProductItem from "./productItem";
-import useProduct from "@/hooks/useProduct";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -101,9 +100,11 @@ export default function Products() {
             </form>
          </div>
          <div className="flex flex-col items-center gap-8 w-full">
-            {data.map((product: IProduct) => {
-               return <ProductItem productItem={product} key={product.id} />;
-            })}
+            {data
+               .map((product: IProduct) => {
+                  return <ProductItem productItem={product} key={product.id} />;
+               })
+               .reverse()}
          </div>
       </div>
    );
