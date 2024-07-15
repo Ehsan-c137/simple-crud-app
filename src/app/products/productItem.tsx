@@ -2,8 +2,7 @@ import { useState } from "react";
 import { IProduct } from "@/types/Product";
 import useProduct from "@/hooks/useProduct";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import updateProduct from "@/api/updateProduct";
-import deleteProduct from "@/api/deleteProduct";
+import { updateProduct, deleteProduct } from "@/api";
 
 export default function ProductItem({
    productItem,
@@ -45,31 +44,35 @@ export default function ProductItem({
       deleteMutation.mutate(productItem.id);
    };
 
+   const EditElement = () => (
+      <div>
+         <input
+            type="text"
+            id="fname"
+            name="name"
+            value={product?.name}
+            onChange={handleProductDetail}
+            placeholder={productItem?.name}
+            className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700 "
+         />
+         <input
+            type="number"
+            id="price"
+            onChange={handleProductDetail}
+            value={product?.price}
+            name="price"
+            placeholder={productItem?.price}
+            className=" border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700"
+         />
+      </div>
+   );
+
    return (
       <>
-         <div className="flex flex-col gap-4 items-center justify-center  p-4 bg-white border border-gray-200  rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <div className="w-full max-w-sm">
+         <div className="flex max-w-3xl min-w-[350px] justify-center gap-10 p-4 bg-white border border-gray-200 col-span-1 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="w-full max-w-sm flex">
                {isEditing ? (
-                  <div>
-                     <input
-                        type="text"
-                        id="fname"
-                        name="name"
-                        value={product?.name}
-                        onChange={handleProductDetail}
-                        placeholder={productItem?.name}
-                        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700 "
-                     />
-                     <input
-                        type="number"
-                        id="price"
-                        onChange={handleProductDetail}
-                        value={product?.price}
-                        name="price"
-                        placeholder={productItem?.price}
-                        className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700"
-                     />
-                  </div>
+                  <EditElement />
                ) : (
                   <div>
                      <a href="#">
@@ -85,24 +88,26 @@ export default function ProductItem({
                   </div>
                )}
             </div>
-            <button
-               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-               onClick={(e) => {
-                  setIsEditing(!isEditing);
-                  if (isEditing && product.name.length > 0) {
-                     // TODO: install zod for validation
-                     handleUpdateProduct(e);
-                  }
-               }}
-            >
-               {isEditing ? "Save" : "Edit"}
-            </button>
-            <button
-               onClick={handleDeleteProduct}
-               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-               Delete
-            </button>
+            <div className="flex items-center gap-4">
+               <button
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={(e) => {
+                     setIsEditing(!isEditing);
+                     if (isEditing && product.name.length > 0) {
+                        // TODO: install zod for validation
+                        handleUpdateProduct(e);
+                     }
+                  }}
+               >
+                  {isEditing ? "Save" : "Edit"}
+               </button>
+               <button
+                  onClick={handleDeleteProduct}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+               >
+                  Delete
+               </button>
+            </div>
          </div>
       </>
    );
