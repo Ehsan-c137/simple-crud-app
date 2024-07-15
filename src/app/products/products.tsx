@@ -14,7 +14,7 @@ export default function Products() {
 
    const queryClient = useQueryClient();
 
-   const { data, isError, isLoading } = useQuery({
+   const { data, isError, isLoading, error } = useQuery({
       queryKey: ["products"],
       queryFn: () => GetProducts(),
    });
@@ -36,7 +36,10 @@ export default function Products() {
    };
 
    if (isLoading) return "loading...";
-   if (isError) return "something went wrong";
+   if (isError)
+      return `something went wrong
+   ${error}
+   `;
 
    return (
       <div className=" bg-gray-300 p-4 w-full min-h-screen">
