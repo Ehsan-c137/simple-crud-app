@@ -1,11 +1,9 @@
 "use client";
 
-import GetProducts from "@/api/getProducts";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { IProduct } from "@/types/Product";
 import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
-import createProduct from "@/api/createProduct";
+import { getProducts, createProduct } from "@/api";
 import ProductItem from "./productItem";
 import useProduct from "@/hooks/useProduct";
 
@@ -16,7 +14,7 @@ export default function Products() {
 
    const { data, isError, isLoading, error } = useQuery({
       queryKey: ["products"],
-      queryFn: () => GetProducts(),
+      queryFn: () => getProducts(),
    });
 
    const mutation = useMutation({
