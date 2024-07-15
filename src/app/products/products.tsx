@@ -76,7 +76,7 @@ export default function Products() {
                </button>
             </form>
          </div>
-         <div className="flex flex-wrap justify-center gap-8 w-full">
+         <div className="flex flex-col items-center gap-8 w-full">
             {data.map((product: IProduct) => {
                return <ProductItem productItem={product} key={product.id} />;
             })}
