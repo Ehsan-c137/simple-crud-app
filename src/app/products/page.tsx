@@ -9,10 +9,10 @@ import Products from "./products";
 export default async function ProductsPage() {
    const queryClient = new QueryClient();
 
-   await queryClient.prefetchQuery({
-      queryKey: ["products"],
-      queryFn: GetProducts,
-   });
+   // await queryClient.prefetchQuery({
+   //    queryKey: ["products"],
+   //    queryFn: GetProducts,
+   // });
 
    return (
       <HydrationBoundary state={dehydrate(queryClient)}>
