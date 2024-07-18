@@ -3,6 +3,9 @@ import { IProduct } from "@/types/Product";
 import useProduct from "@/hooks/useProduct";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProduct, deleteProduct } from "@/api";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export default function ProductItem({
    productItem,
@@ -45,31 +48,29 @@ export default function ProductItem({
    };
 
    const EditElement = () => (
-      <div>
-         <input
+      <div className="flex flex-col gap-2">
+         <Input
             type="text"
             id="fname"
             name="name"
             value={product?.name}
             onChange={handleProductDetail}
             placeholder={productItem?.name}
-            className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700 "
          />
-         <input
+         <Input
             type="number"
             id="price"
             onChange={handleProductDetail}
             value={product?.price}
             name="price"
             placeholder={productItem?.price}
-            className=" border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700"
          />
       </div>
    );
 
    return (
       <>
-         <div className="flex max-w-3xl min-w-[350px] justify-center gap-10 p-4 bg-white border border-gray-200 col-span-1 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+         <Card className="flex max-w-3xl min-w-[350px] justify-center gap-10 p-4  col-span-1 rounded-lg shadow">
             <div className="w-full max-w-sm flex">
                {isEditing ? (
                   <EditElement />
@@ -89,8 +90,7 @@ export default function ProductItem({
                )}
             </div>
             <div className="flex items-center gap-4">
-               <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+               <Button
                   onClick={(e) => {
                      setIsEditing(!isEditing);
                      if (isEditing && product.name.length > 0) {
@@ -100,15 +100,12 @@ export default function ProductItem({
                   }}
                >
                   {isEditing ? "Save" : "Edit"}
-               </button>
-               <button
-                  onClick={handleDeleteProduct}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-               >
+               </Button>
+               <Button variant={"outline"} onClick={handleDeleteProduct}>
                   Delete
-               </button>
+               </Button>
             </div>
-         </div>
+         </Card>
       </>
    );
 }
