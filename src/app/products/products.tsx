@@ -2,24 +2,24 @@
 
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { IProduct } from "@/types/Product";
-import Link from "next/link";
 import { getProducts, createProduct } from "@/api";
 import ProductItem from "./productItem";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { m } from "framer-motion";
+import z from "zod";
 
-const newProductSchema = z.object({
+export const newProductSchema = z.object({
    name: z
       .string()
       .min(3, { message: "product name must be at least 3 characters" }),
    price: z.number().min(1, { message: "product price must be at least 1" }),
 });
 
-type NewProduct = z.infer<typeof newProductSchema>;
+export type NewProduct = z.infer<typeof newProductSchema>;
 
 export default function Products() {
    const queryClient = useQueryClient();
@@ -88,7 +88,7 @@ export default function Products() {
                   <Input
                      type="number"
                      id="price"
-                     {...(register("price"), { valueAsNumber: true })}
+                     {...register("price", { valueAsNumber: true })}
                      placeholder="price"
                   />
 
