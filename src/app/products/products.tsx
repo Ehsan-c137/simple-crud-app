@@ -67,7 +67,7 @@ export default function Products() {
 
    return (
       <div className="p-4 w-full min-h-screen bg-slate-200 flex flex-col lg:flex-row gap-4 ">
-         <Card className="p-4 max-h-56 col-span-1">
+         <Card className="p-4 max-h-80 col-span-1">
             <form
                onSubmit={handleSubmit(handleSubmitProduct)}
                className="flex flex-col gap-4 "
@@ -80,18 +80,22 @@ export default function Products() {
                      placeholder="name"
                      className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700 "
                   />
+
                   {errors.name && (
                      <p className="text-red-500">{errors.name.message}</p>
                   )}
+
                   <Input
                      type="number"
                      id="price"
-                     {...(register("name"), { valueAsNumber: true })}
+                     {...(register("price"), { valueAsNumber: true })}
                      placeholder="price"
                   />
+
                   {errors.price && (
                      <p className="text-red-500">{errors.price.message}</p>
                   )}
+
                   <Button type="submit">
                      {mutation.status === "pending"
                         ? "loading..."
