@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { m } from "framer-motion";
 import z from "zod";
 
 export const newProductSchema = z.object({
@@ -87,6 +86,7 @@ export default function Products() {
 
                   <Input
                      type="number"
+                     min={1}
                      id="price"
                      {...register("price", { valueAsNumber: true })}
                      placeholder="price"
