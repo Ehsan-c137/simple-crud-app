@@ -14,15 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { createProduct } from "@/api";
 import { z } from "zod";
-
-export const newProductSchema = z.object({
-   name: z
-      .string()
-      .min(3, { message: "product name must be at least 3 characters" }),
-   price: z.number().min(1, { message: "product price must be at least 1" }),
-});
-
-export type NewProduct = z.infer<typeof newProductSchema>;
+import { newProductSchema, NewProduct } from "./productItem";
 
 export default function ProductsPage() {
    const queryClient = useQueryClient();
@@ -40,8 +32,8 @@ export default function ProductsPage() {
       resolver: zodResolver(newProductSchema),
       mode: "onChange",
       defaultValues: {
-         name: "",
-         price: 0,
+         newName: "",
+         newPrice: 0,
       },
    });
 
@@ -56,8 +48,8 @@ export default function ProductsPage() {
    const handleSubmitProduct = (data: NewProduct) => {
       // FIX: price should't be string
       mutation.mutate({
-         price: `${data.price}`,
-         name: data.name,
+         price: `${data.newPrice}`,
+         name: data.newName,
          id: Date.now().toString(),
       });
    };
@@ -75,14 +67,14 @@ export default function ProductsPage() {
                         <Input
                            type="text"
                            id="fname"
-                           {...register("name")}
+                           {...register("newName")}
                            placeholder="name"
                            className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-700 "
                         />
 
-                        {errors.name && (
+                        {errors.newName && (
                            <p className="text-red-500 text-md">
-                              {errors.name.message}
+                              {errors.newName.message}
                            </p>
                         )}
                      </div>
@@ -91,13 +83,13 @@ export default function ProductsPage() {
                            type="number"
                            min={1}
                            id="price"
-                           {...register("price", { valueAsNumber: true })}
+                           {...register("newPrice", { valueAsNumber: true })}
                            placeholder="price"
                         />
 
-                        {errors.price && (
+                        {errors.newPrice && (
                            <p className="text-red-500 text-md">
-                              {errors.price.message}
+                              {errors.newPrice.message}
                            </p>
                         )}
                      </div>
